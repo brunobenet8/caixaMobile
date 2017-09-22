@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html ng-app="caixa">
+  <head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <script src="angular.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script>
+      angular.module("caixa", []);
+      angular.module("caixa").controller("caixactrl", function($scope){
+        
+        $scope.mov=[];
+        $scope.adicionar = function(moves){
+          $scope.mov.push(angular.copy(moves));
+          //$scope.saldo += parseFloat($scope.moves.valor);    
+          delete $scope.moves;
+        };
+        $scope.$watchCollection('mov',function() {  
+        $scope.saldo = 0;  
+        angular.forEach($scope.mov, function(value, key) {
+          $scope.saldo += parseFloat(value.valor);
+        })
+      });
+      });
+      </script>
+      <style>
+        .maior{
+          color: blue;
+        }
+        .menor{
+          color: red;
+        }
+        </style>
+  </head>
+  <body style="background-color:#eceff1" ng-controller="caixactrl">
+    <nav>
+    <div class="blue">
+    <a>Saldo: {{saldo | currency}}</a>  
+    </div>  
+    </nav>   
+  </br>
+
+<div class="fixed-action-btn toolbar">
+<a class="btn-floating btn-large waves-effect waves-light modal-trigger green" href="#modal1"><i class="material-icons">add</i></a>
+</div> 
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Novo Lancamento</h4>
+      <div>
+      <form>
+        Descricao: <input type="text" ng-model="moves.descricao">
+        Valor: <input type="number" ng-model="moves.valor">        
+      </form>  
+      </div> 
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
+      <button class="modal-action modal-close waves-effect waves-light btn" ng-click="adicionar (moves)">Salvar</button>
+    </div>
+  </div>
+
+  <div class="card" style="width:85%; margin-left:auto; margin-right:auto">
+    <table class="bordered striped">
+      <tr>
+        <th>Descricao</th>
+      <th>Valor</th>
+      <th></th>    
+      </tr>
+        <tr ng-repeat="moves in mov">
+          <td>{{moves.descricao | uppercase}}</td>
+          <td ng-class="{'maior': moves.valor>0, 'menor': moves.valor<0}">{{moves.valor | currency}}</td>
+          <td><button ng-click="mov.splice($index, 1); somar()" class="btn-floating btn-large waves-effect waves-light red">X</button></td>
+        </tr>  
+    </table>
+  </div>    
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script>
+      $(document).ready(function() {
+    $('#modal1').modal();
+});
+      </script>
+  </body>
+</html> 
