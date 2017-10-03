@@ -6,19 +6,20 @@
     <script src="angular.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script>
+      
       angular.module("caixa", []);
       angular.module("caixa").controller("caixactrl", function($scope){
         
         $scope.mov=[];
         $scope.adicionar = function(moves){
-          $scope.mov.push(angular.copy(moves));
-          //$scope.saldo += parseFloat($scope.moves.valor);    
+          $scope.mov.push(angular.copy(moves));                
           delete $scope.moves;
         };
         $scope.$watchCollection('mov',function() {  
         $scope.saldo = 0;  
         angular.forEach($scope.mov, function(value, key) {
           $scope.saldo += parseFloat(value.valor);
+          
         })
       });
       });
@@ -33,9 +34,10 @@
         </style>
   </head>
   <body style="background-color:#eceff1" ng-controller="caixactrl">
-    <nav>
+    
+    <nav >
     <div class="blue">
-    <a>Saldo: {{saldo | currency}}</a>  
+    <a style="font-size: 20px;">Saldo: {{saldo | currency}}</a>  
     </div>  
     </nav>   
   </br>
@@ -59,7 +61,7 @@
     </div>
   </div>
 
-  <div class="card" style="width:85%; margin-left:auto; margin-right:auto">
+  <div>
     <table class="bordered striped">
       <tr>
         <th>Descricao</th>
@@ -69,7 +71,8 @@
         <tr ng-repeat="moves in mov">
           <td>{{moves.descricao | uppercase}}</td>
           <td ng-class="{'maior': moves.valor>0, 'menor': moves.valor<0}">{{moves.valor | currency}}</td>
-          <td><button ng-click="mov.splice($index, 1); somar()" class="btn-floating btn-large waves-effect waves-light red">X</button></td>
+          <td><span ng-click="mov.splice($index, 1); somar()" class="btn btn-floating red">X</span></td>
+          
         </tr>  
     </table>
   </div>    
